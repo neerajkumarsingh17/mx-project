@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Enrollment Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="main.js"></script>
+</head>
+<body>
+    <div class='container'>
+        <div class="jumbotron">
+    <h1>Hello</h1>
+
+    <form action="">
+        Courses :
+        <select name="course_overview">
+        % for enroll in course:
+            <option value="course">${ enroll }</option>
+        % endfor
+        </select>
+
+        <br>
+        Select User
+        <select  name="user_select" id="selectChoice">
+            <option value="user_all">Select all User</option>
+            <option value="user_select">Selected User</option>
+        </select>
+       
+        
+        <div id="chechData" name="user_data" style="display: none">
+            <select name="auth-user" multiple>
+                % for user in users:
+                <option value="course">${ user }</option>
+                % endfor
+            </select>
+        </div>
+        <br>
+        <input type="submit" value="Enrolled" />
+
+        </form>
+
+        
+
+
+        <script>
+        (function($) {
+                $('select[name=user_select]').change(function () {
+                    
+                    if ($('select[name=user_select] option:selected').val() == 'user_select') {
+                        $('#chechData').show();
+                       
+                    } else {
+                        $('#chechData').hide();
+                    }
+                });
+            }) (jQuery);
+        </script>
+
+
+</body>
+</html>
