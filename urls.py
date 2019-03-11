@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
 
     url(r'^$', views.course_date, name='course_date'),
-    url(r'^$', views.show_data, name='show_data'),
+    url(r'^enrolled_data/', views.enrolled_data, name='enrolled_data'),
 
 
    

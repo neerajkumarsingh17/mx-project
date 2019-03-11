@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,42 +11,40 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="main.js"></script>
+    <meta name="csrf_token" content="{{ csrf_token }}">
 </head>
+
 <body>
     <div class='container'>
         <div class="jumbotron">
-    <h1>Hello</h1>
-
-    <form action="">
+            <h1>Enrollment Form</h1>
+            <!-- 
+    <form action="/mx-enrollment_new/enrolled_data/" method="post">${ csrf_token }
         Courses :
-        <select name="course_overview">
+        <select name="course_overview" title="my_options">
         % for enroll in course:
-            <option value="course">${ enroll }</option>
+            <option value="course_name" name="enroll_course">${ enroll }</option>
         % endfor
         </select>
 
         <br>
         Select User
-        <select  name="user_select" id="selectChoice">
+        <select  name="user_select" id="selectChoice" >
             <option value="user_all">Select all User</option>
             <option value="user_select">Selected User</option>
         </select>
        
         
-        <div id="chechData" name="user_data" style="display: none">
-            <select name="auth-user" multiple>
+        <div id="chechData" name="user_data" title="my_options_user" style="display: none">
+            <select name="auth-user" value="${ csrf_token }" multiple>
                 % for user in users:
-                <option value="course">${ user }</option>
+                <option value="user" name="enrolled_user">${ user }</option>
                 % endfor
             </select>
         </div>
         <br>
         <input type="submit" value="Enrolled" />
-
-        </form>
-
-        
-
+    </form>
 
         <script>
         (function($) {
@@ -59,8 +58,59 @@
                     }
                 });
             }) (jQuery);
-        </script>
 
+        </script>  -->
+
+
+
+            <form action="/mx-enrollment_new/enrolled_data/" method="post">
+                {% csrf_token %}
+                Courses :
+                <select name="course_overview" title="my_options">
+                    {% for enroll in course %}
+                    <option value="course_name" name="enroll_course">{{ enroll }}</option>
+                    {% endfor %}
+                </select>
+
+                <br>
+                Select User
+                <select name="user_select" id="selectChoice">
+                    <option value="user_all">Select all User</option>
+                    <option value="user_select">Selected User</option>
+                </select>
+
+
+                <div id="chechData" name="user_data" title="my_options_user" style="display: none">
+                    <select name="auth-user" multiple>
+                        {% for user in users %}
+                        <option value="user" name="enrolled_user">{{ user }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br>
+                <input type="submit" value="Enrolled" />
+
+            </form>
+
+
+
+
+
+            <script>
+                (function ($) {
+                    $('select[name=user_select]').change(function () {
+
+                        if ($('select[name=user_select] option:selected').val() == 'user_select') {
+                            $('#chechData').show();
+
+                        } else {
+                            $('#chechData').hide();
+                        }
+                    });
+                })(jQuery);
+
+            </script>
 
 </body>
+
 </html>
