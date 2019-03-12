@@ -63,24 +63,30 @@
 
 
 
-            <form action="/mx-enrollment_new/enrolled_data/" method="post">
+            <form action="/course_date/" method="post">
                 {% csrf_token %}
                 Courses :
                 <select name="course_overview" title="my_options">
                     {% for enroll in course %}
                     <option value="course_name" name="enroll_course">{{ enroll }}</option>
                     {% endfor %}
+                    Select User:    
+                    {% for user in users %}
+                    <option value="user" name="enrolled_user">{{ user }}</option>
+                    {% endfor %}
                 </select>
 
                 <br>
                 Select User
                 <select name="user_select" id="selectChoice">
-                    <option value="user_all">Select all User</option>
-                    <option value="user_select">Selected User</option>
+                    {% for user in users %}
+                    <option value="user" name="enrolled_user">{{ user }}</option>
+                    {% endfor %}
+
                 </select>
 
 
-                <div id="chechData" name="user_data" title="my_options_user" style="display: none">
+                <div id="chechData" name="user_data" title="my_options" style="display: none">
                     <select name="auth-user" multiple>
                         {% for user in users %}
                         <option value="user" name="enrolled_user">{{ user }}</option>
@@ -91,10 +97,6 @@
                 <input type="submit" value="Enrolled" />
 
             </form>
-
-
-
-
 
             <script>
                 (function ($) {
@@ -114,3 +116,195 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+<!-- 
+
+
+
+
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}
+<style>
+    .wrpper {
+        margin: 10px;
+        padding: 20px;
+        border: 1px solid silver;
+
+<div class=" breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; {% trans 'Documentation' %}
+</div>
+{% endblock %}
+{% block title %}{% trans 'Extra' %}{% endblock %}
+
+{% block content %}
+
+<h1>{% trans 'Create Push Notification' %}</h1>
+
+<div class="push-notif-status" id="push_notif_status" hidden>
+    <div class="table">
+        <tr>
+            <td>Server Response:</td>
+            <td><b>
+                    <p id="response_notif">0
+
+                        <p>
+                </b></td>
+        </tr>
+    </div>
+</div>
+
+<form name="notification" METHOD="POST" action="/notification/new/"> {% csrf_token %}
+    <div class="wrpper">
+        <div class="push-notif" id="push_notif">
+            <div class="notif-type">
+                <select class="notif-type-select" name="notif-type-select" style=" width:425px;" required
+                    onchange="notifType(this)">
+                    <option value="">Select notification type</option>
+                    <option value="course">Course</option>
+                    <option value="connect">Connect</option>
+                </select>
+
+                <p class="connect" id="connect" style="margin:0;padding-top:10px;">Enter Connect URL:</p>
+                <input class="connect-url" type="url" name="urlPath"
+                    placeholder="Enter connect URL. Default is connect homepage."
+                    style="display:none; margin-top:10px; width:425px;">
+
+                <p class="course" id="course" style="margin:0;padding-top:10px;">Enter Course Id:</p>
+                <input list="CourseID" class="course-id" name="courseId"
+                    placeholder="Enter Course Id. Default is course dashboard."
+                    style="display:none; margin-top:10px; width:425px;">
+
+                <datalist id="CourseID">
+                    {% for enrollment in enrollments %}
+                    <option value="{{ enrollment.id }}">
+                        ( {{enrollment.display_name }} )
+                    </option>
+                    {% endfor %}
+                </datalist>
+            </div>
+            <hr>
+
+            <p style="margin:0;padding-top:2px;">Enter the notification title:</p>
+            <input class="notif-title" name="title" value="" style=" width:425px;" required />
+            <hr>
+
+            <p style="margin:0;padding-top:2px;">Enter the notification message:</p>
+            <textarea class="notif-message" name="message" value="" rows="4" cols="50" required></textarea>
+            <hr>
+
+            <p><input type="checkbox" id="bulk_notif" name="bulk_notif" value="bulk_notif">&nbsp;For Bulk Notification
+            </p>
+
+            <div id="bulk" style="margin-top: 2px">
+                <p style="margin:0">Paste the usernames seperated by comma:</p>
+                <textarea class="notif-message" id="notif_usernames_bulk" name='numbers' value="" rows="4"
+                    cols="50"></textarea>
+            </div>
+
+            <div id="select" style="width: 425px;">
+                <p style="margin:0;padding-top:2px;">Enter the phone number and press enter. Default is all mobile
+                    users.</p>
+                <input type="text" class="notif-usernames" id="notif_usernames" name='usernames' value="" />
+            </div>
+            <hr>
+
+            <p><input type="checkbox" id="schedule" name="schedule" value="schedule" onclick="myFunction();"> Schedule
+            </p>
+
+            <div class="row" id="datetimediv" style="margin-top: 2px;">
+                <div class='col-sm-4'>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' id="datetime" name="datetime" value="" class="form-control"
+                                style="width: 390px" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar" onclick="showCalender();"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div style="margin-top: 5px;">
+                <button type="submit" id="notify" name="notify" value="">Notify</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="/static/added/extra-admin/bootstrap-tokenfield/bootstrap-tokenfield.js"
+    charset="UTF-8"></script>
+<script type="text/javascript" src="/static/added/extra-admin/docs-assets/js/scrollspy.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/static/added/extra-admin/docs-assets/js/affix.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/static/added/extra-admin/docs-assets/js/typeahead.bundle.min.js"
+    charset="UTF-8"></script>
+<script type="text/javascript" src="/static/added/extra-admin/docs-assets/js/docs.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/static/added/js/push-notif.js"></script>
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+<script type="text/javascript">
+
+    //    $(function () {
+    //        $("#notif_usernames_bulk").prop('required', true);
+    //    });
+    //
+    //    $(function () {
+    //        $("#notif_usernames").prop('required', true);
+    //    });
+
+    //$('#notif_usernames').prop('required',true);
+
+    $(function () {
+        $('#bulk').hide();
+        $('input[name="bulk_notif"]').on('click', function () {
+            if ($(this).prop('checked')) {
+                $('#bulk').fadeIn();
+                //$("#notif_usernames_bulk").prop('required', true);
+                //$("#notif_usernames").prop('required', false);
+                $('#select').fadeOut();
+            } else {
+                $('#bulk').fadeOut();
+                $('#select').fadeIn();
+                //$("#notif_usernames").prop('required', true);
+                //$("#notif_usernames_bulk").prop('required', false);
+
+            }
+        });
+    });
+
+    $('#datetimediv').hide();
+    function myFunction() {
+        var x = document.getElementById("datetimediv");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+    function showCalender() {
+        $(document).ready(function () {
+            $(function () {
+                $('#datetimepicker1').datetimepicker({ format: 'DD/MM/YYYY HH:mm:ss' });
+            });
+        });
+    }
+    $('#connect').hide();
+    $('#course').hide();
+</script>
+{% endblock %} -->
