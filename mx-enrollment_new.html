@@ -1,175 +1,85 @@
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <title>Enrollment Form</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1">    
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">    
-            <link rel="stylesheet" type="text/css" media="screen" href="main.css">
-            <meta name="csrf_token" content="${ csrf_token }">
-            <script type="text/javascript"></script>    
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-        </head>
-        <body>
-            <div class='container'>
-                <div class="jumbotron">
-            <h1>Enrollment Form</h1>
-        
-    <!--        <form id="enrollment" action="" method="post">${ csrf_token }
-                Courses :
-                <select id='course' name="course_id" title="courses">
-                % for enroll in course:
-                    <option value="${ enroll }">${ enroll }</option>
-                % endfor
-                </select>
-
-                <br>
-                Select User
-                <select  name="user_select" id="selectChoice" >
-                    <option value="user_all">Select all User</option>
-                    <option value="user_select">Selected User</option>
-                </select>
-            
-                
-                <div id="chechData" name="user_data" title="my_options_user" style="display: none">
-                    <select name="auth-user" value="${ csrf_token }" multiple>
-                        % for user in users:
-                        <option value="user" name="enrolled_user">${ user }</option>
-                        % endfor
-                    </select>
-                </div>
-                <br>
-                <input type="submit" value="Enrolled" />
-            </form>
-
-                <script>
-                (function($) {
-                        $('select[name=user_select]').change(function () {
-                            
-                            if ($('select[name=user_select] option:selected').val() == 'user_select') {
-                                $('#chechData').show();
-                            
-                            } else {
-                                $('#chechData').hide();
-                            }
-                        });
-                    }) (jQuery);
-
-                </script>  
-
-                -->
-
-                <form id="enrollment" action="" method="post">
-                    {% csrf_token %}
-                    Courses :
-                    <select id='course' name="course_id" title="courses">
-                        {% for enroll in course %}
-                        <option value="{{ enroll }}">{{ enroll }}</option>
-                        {% endfor %}
-                    </select>
-                
-                    <!-- <br>
-                    Select User
-                    <select name="user_select" id="selectChoice">
-                        <option value="user_all">Select all User</option>
-                        <option value="user_select">Selected User</option>
-                    </select>
-                
-                
-                    <div id="chechData" name="user_data"  style="display: none">
-                        <select name="user_id" multiple id="multi">
-                            {% for user in users %}
-                            <option value="{{ user }}">{{ user }}</option>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Enrollment Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">    
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <meta name="csrf_token" content="${ csrf_token }">
+    <script type="text/javascript"></script>    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #enrollment {
+            position: relative;
+            height: 500px;
+            width: 500px;
+            margin: 100px;
+            padding: 50px;
+            border: 1px solid black;
+        }
+</style>
+    </head>
+    <body>
+        <div class='container'>
+            <div class="jumbotron">
+                <h1>Enrollment Form</h1>
+                    <form id="enrollment" action="" method="post">
+                        {% csrf_token %}
+                        <h2>Courses :</h2>
+                        <select id='course' name="course_id" title="courses">
+                            {% for enroll in course %}
+                            <option value="{{ enroll }}">{{ enroll }}</option>
                             {% endfor %}
                         </select>
-                    </div>
-                    <br> -->
-                    <br>
-                    Enter  usernames separated by commas: <input id='getusers' type="text" name="getuser">
-
-                    <p><input type="checkbox" id="checkbox" name="bulk_notif" value="bulk_notif">
-                            Auto enroll users
-                    </p>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-success" id='progress_bar' role="progressbar" aria-valuenow="40" aria-valuemin="0"
-                            aria-valuemax="100" style="width: '/{{count}}/' + '%'">
-                            {{count}} % Complete (success)
-                        </div>
-                    </div>
                     
-                    <input  id='sumbit' type="submit" value="Enrolled"  />
+                        <br>
+                        <h2>User Name :</h2>
+                        <h5>Enter  usernames separated by commas: </h5><input id='getusers' type="text" name="getuser" size="39">
+
+                        <p><input type="checkbox" id="checkbox" name="bulk_notif" value="bulk_notif">
+                                Auto enroll users
+                        </p>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" id='progress_bar' role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                aria-valuemax="100" >
+                                {{value}} % Complete (success)
+                            </div>
+                        </div>
+                        <input  id='sumbit' type="submit" value="Enrolled"  />
+                    
+                    </form>
+                </div>
+            </div>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+            
+            <script>
                 
-                </form>
-                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
-                
-                <script>
-                    // (function ($) {
-                    //         $('select[name=user_select]').change(function () {
-
-                    //             if ($('sstatuslect] option:selected').val() == 'user_select') {
-                    //                 $('#status;
-
-                    //             } else {status
-                    //                 $('#chechData').hide();
-                    //             }
-                    //         });
-
-                    //     })(jQuery);
-
-                    //  $(function () {
-                    //         $('#bulk').hide();
-                    //         $('input[name="bulk_notif"]').on('click', function () {
-                    //             if ($(this).prop('checked')) {
-                    //                 $('#bulk').fadeIn();
-                    //             } else {
-                    //                 $('#bulk').fadeOut();
-                    //             }
-                    //         });
-                    //     });
-
-
-                    /*  var csrfmiddlewaretoken= $('input[name=csrfmiddlewaretoken]').val();
-                    $(document).on('#submit', '#enrollment', function(e) {
-                            e.preventDefault();
-                            $.ajax({
-                                type: 'POST',
-                                url: "/mx-enrollment_new/user_data/",
-                                data: {
-                                    "user_id": $('#multi').val(),
-                                    "csrfmiddlewaretoken": csrfmiddlewaretoken
-                                },
-                                success: function () {
-                                    alert("User Enrolled");
-                                }
+                    $("#sumbit").click(function () {
+                        
+                            var users= $("#getusers").val()
+                            var course= $("#course").val()
+                            var all_user= $('#checkbox').is(':checked'); 
+                            data={
+                                course:course,
+                                users:users,
+                                all_user: all_user
+                            }
+                            alert(course,users)
+                            console.log(users)
+                                $.post("enroll_user/", data,function (data, status) {
+                                alert("Data: " + data + "\nStatus: " + status + "\nCount: " + count);
+                                log.console(count)
                             })
-                        }) */
-
-                        $("#sumbit").click(function () {
-                            
-                                var users= $("#getusers").val()
-                                var course= $("#course").val()
-                                var all_user= $('#checkbox').is(':checked'); 
-                                data={
-                                    course:course,
-                                    users:users,
-                                    all_user: all_user
-                                }
-                                alert(course,users)
-                                console.log(users)
-                                    $.post("enroll_user/", data,function (data, status) {
-                                    alert("Data: " + data + "\nStatus: " + status);
-                                })
-                        });
-
-                        $('#progress_bar').
-                </script>
+                    });
+            </script>
 
 
-        </body>
-        </html>
+    </body>
+    </html>
 
 
 
@@ -179,25 +89,3 @@
 
 
 
-
-        <!-- 
-        $(document).ready(function () {
-        $("submit").click(function () {
-        var user = [];
-        $.each($("#multi option:selected"), function () {
-        user.push($(this).val());
-        user = user.join(",")
-        $.ajax({
-        method: "POST",
-        url: "/mx-enrollment_new/",
-        data: { "user": user },
-        dataType: "json",
-        context: this,
-        success: function (response) {
-        $(document).html(response)
-        }
-        });
-        });
-        alert("You have selected the user - " + user.join(", "));
-        });
-        }); -->
